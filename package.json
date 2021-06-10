@@ -1,0 +1,22 @@
+{
+  "name": "fontgen",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ShreeyansB/fontgen.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ShreeyansB/fontgen/issues"
+  },
+  "homepage": "https://github.com/ShreeyansB/fontgen#readme",
+  "dependencies": {
+    "canvas": "^2.8.0"
+  }
+}
