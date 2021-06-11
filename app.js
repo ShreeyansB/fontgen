@@ -104,11 +104,11 @@ app.get('/code', async (req, res) => {
 })
 
 app.get('/list-fonts', async (req, res) => {
-  res.send('placeholder')
+  res.send(fontDB.db)
 })
 
 app.get('/list-themes', async (req, res) => {
-  res.send('placeholder')
+  res.send(fontDB.codeTheme)
 })
 
 app.listen(port, () => {
