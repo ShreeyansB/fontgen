@@ -18,6 +18,7 @@
   "homepage": "https://github.com/ShreeyansB/fontgen#readme",
   "dependencies": {
     "express": "^4.17.1",
+    "node-font2base64": "^0.7.1",
     "node-html-to-image": "^3.1.0",
     "path": "^0.12.7"
   }
