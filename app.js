@@ -16,64 +16,100 @@ app.get('', (req, res) => {
   res.send({ error: 'emrror' })
 })
 
-app.get('/gen', async (req, res) => {
-  if (!req.query.img) {
-    res.send({ error: 'img not provided' })
-  } else {
-    console.log('Starting...')
-    if (req.query.img !== 'para') {
-      res.send({ error: 'img type invalid' })
-      return
-    }
-    if (!req.query.f1) {
-      req.query.f1 = 'Arial'
-    }
-    if (!req.query.f2) {
-      req.query.f2 = 'Arial'
-    }
-    if (!(checkFont(req.query.f1) && checkFont(req.query.f2))) {
-      res.send({ error: 'Invalid fontface' })
-      return
-    }
-    else {
-      console.log('Checks passed.')
-      const font1 = getFont(req.query.f1)
-      const font2 = getFont(req.query.f2)
-      const weight1 = getWeight1(font1, req.query.w1)
-      const weight2 = getWeight2(font2, req.query.w2)
-      var font1Url = ''
-      var font2Url = ''
-      if (font1.family === 'Arial') {
-        font1Url = 'undefined'
-      } else {
-        font1Url = font2b64.encodeToDataUrlSync('./fonts/' + font1.family + '/' + font1.family + '-' + weight1 + '.ttf')
-      }
-      if (font2.family === 'Arial') {
-        font2Url = 'undefined'
-      } else {
-        font2Url = font2b64.encodeToDataUrlSync('./fonts/' + font2.family + '/' + font2.family + '-' + weight2 + '.ttf')
-      }
-
-      const config = {
-        fontHead: {
-          family: font1.family,
-          fontUrl: font1Url,
-          weight: weight1
-        },
-        fontSub: {
-          family: font2.family,
-          fontUrl: font2Url,
-          weight: weight2
-        }
-      }
-      const image = await nodeHtmlToImage({ html: myHtml.htmlDoc(config), transparent: true })
-      res.writeHead(200, { 'Content-Type': 'image/png' });
-      res.end(image, 'binary');
-    }
+app.get('/para', async (req, res) => {
+  console.log('Starting...')
+  if (!req.query.f1) {
+    req.query.f1 = 'Arial'
   }
+  if (!req.query.f2) {
+    req.query.f2 = 'Arial'
+  }
+  if (!(checkFont(req.query.f1) && checkFont(req.query.f2))) {
+    res.send({ error: 'Invalid fontface' })
+    return
+  }
+  else {
+    console.log('Checks passed.')
+    const font1 = getFont(req.query.f1)
+    const font2 = getFont(req.query.f2)
+    const weight1 = getWeight1(font1, req.query.w1)
+    const weight2 = getWeight2(font2, req.query.w2)
+    var font1Url = ''
+    var font2Url = ''
+    if (font1.family === 'Arial') {
+      font1Url = 'undefined'
+    } else {
+      font1Url = font2b64.encodeToDataUrlSync('./fonts/' + font1.family + '/' + font1.family + '-' + weight1 + '.ttf')
+    }
+    if (font2.family === 'Arial') {
+      font2Url = 'undefined'
+    } else {
+      font2Url = font2b64.encodeToDataUrlSync('./fonts/' + font2.family + '/' + font2.family + '-' + weight2 + '.ttf')
+    }
+
+    const config = {
+      fontHead: {
+        family: font1.family,
+        fontUrl: font1Url,
+        weight: weight1
+      },
+      fontSub: {
+        family: font2.family,
+        fontUrl: font2Url,
+        weight: weight2
+      }
+    }
+    const image = await nodeHtmlToImage({ html: myHtml.htmlDoc(config), transparent: true })
+    res.writeHead(200, { 'Content-Type': 'image/png' });
+    res.end(image, 'binary');
+  }
+
 
 })
 
+app.get('/code', async (req, res) => {
+  if (!req.query.font) {
+    req.query.font = -1
+  }
+  if (!req.query.theme) {
+    req.query.theme = 'default'
+  }
+  if (!checkFont(req.query.font)) {
+    res.send({ error: 'Invalid fontface' })
+    return
+  }
+  if (!checkTheme(req.query.theme)) {
+    res.send({ error: 'Invalid theme' })
+    return
+  }
+  let fontData = getFont(req.query.font)
+  fontData.weight = 400
+  let fontUrl = ''
+  if (fontData.family !== -1) {
+    fontUrl = font2b64.encodeToDataUrlSync('./fonts/' + fontData.family + '/' + fontData.family + '-' + fontData.weight + '.ttf')
+  }
+
+  const config = {
+    font: {
+      family: fontData.family,
+      weight: 400,
+      fontUrl: fontUrl
+    },
+    theme: req.query.theme
+  }
+
+  const image = await nodeHtmlToImage({ html: myHtml.codeDoc(config), transparent: true })
+  res.writeHead(200, { 'Content-Type': 'image/png' });
+  res.end(image, 'binary');
+})
+
+app.get('/list-fonts', async (req, res) => {
+  res.send('placeholder')
+})
+
+app.get('/list-themes', async (req, res) => {
+  res.send('placeholder')
+})
 
 app.listen(port, () => {
   console.log('Server is up on port ' + port + '.');
@@ -82,6 +118,9 @@ app.listen(port, () => {
 
 function checkFont(font) {
   if (font === 'Arial') {
+    return true
+  }
+  if (font === -1) {
     return true
   }
   var i = fontDB.db.every(f => {
@@ -99,6 +138,13 @@ function getFont(font) {
   if (font === "Arial") {
     return {
       family: "Arial",
+      type: "Sans Serif",
+      weights: [400]
+    }
+  }
+  if (font === -1) {
+    return {
+      family: -1,
       type: "Sans Serif",
       weights: [400]
     }
@@ -159,5 +205,14 @@ function getWeight2(font, weight) {
   } else {
     return font.weights[0]
   }
+}
+
+function checkTheme(theme) {
+  var i = fontDB.codeTheme.indexOf(theme)
+  if (i !== -1) {
+    return true
+  }
+  console.log(false);
+  return false
 }
 

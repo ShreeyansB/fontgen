@@ -1,5 +1,5 @@
-const htmlDoc = function getPara(config) {
-  var doc = `
+const htmlDoc = function (config) {
+  let doc = `
   <!DOCTYPE html>
   <html lang="en">
   
@@ -66,13 +66,74 @@ const htmlDoc = function getPara(config) {
 }
 
 function getFontCSS(font) {
+  if (font.family === -1) {
+    return ''
+  } else {
   return `@font-face {
     font-family: '${font.family}';
     font-style: normal;
     font-weight: ${font.weight};
     src: url(${font.fontUrl}) format('woff2');
-  }`
+  }`}
 }
 
+const codeDoc = function (config) {
+  let doc = `
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/highlight.min.js"
+    integrity="sha512-W7EehcwtSbRF63FIQlXEOOd5mnq0Et0V0nUOvwcUvjnCKgOLLYbqriQxEQSp63sfrkryxIg/A/O8v8O18QwQCQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/languages/dart.min.js"
+    integrity="sha512-e9tfYUYcegl48CppMz12MOgLQ+d4IsiQyJstDdhsSlQ0ey3P/X3aq7+hzw/dCf++O3ZPB6RZy5Yjv3NoQdBAtg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/styles/`+ config.theme +`.min.css" />
+  <script>hljs.highlightAll();</script>
+  <title>Document</title>
+  <style>
+    `+ getFontCSS(config.font)+`
+    body {
+      width: fit-content;
+    }
+    pre>code {
+      font-size: 30px;
+      font-family:`+config.font.family+` ,monospace;
+    }
+    pre code.hljs {
+      padding: 52px 52px 52px 37px ;
+    }
+    .code {
+      width: fit-content;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="code">
+    <pre><code>class Frog {
+  int id;
+  String name;
+        
+  void wednesday() => print("It is Wednesday my dudes.");
+        
+  Frog(this.id, this.name);
+
+}
+
+void main() {
+    Frog frog = Frog(21, 'Flopper');
+    frog.wednesday();
+}</code></pre>
+  </div>
+</body>
+</html>
+  `
+  return doc
+}
 
 module.exports.htmlDoc = htmlDoc
+module.exports.codeDoc = codeDoc
