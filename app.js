@@ -4,8 +4,6 @@ const nodeHtmlToImage = require('node-html-to-image')
 const myHtml = require('./docs.js')
 const font2b64 = require('node-font2base64')
 const fontDB = require('./fontDB')
-const { checkPrime } = require('crypto')
-const { get } = require('http')
 
 const app = express()
 const port = process.env.PORT || 3000
