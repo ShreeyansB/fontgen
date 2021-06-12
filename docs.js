@@ -9,10 +9,10 @@ const htmlDoc = function (config) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-    `+ getFontCSS(config.fontHead) + getFontCSS(config.fontSub) +`
+    `+ getFontCSS(config.fontHead) + getFontCSS(config.fontSub) + `
     #box {
       width: 750px;
-      background-color: transparent;
+      background-color: `+ getBg(config) + `;
       padding: 35px 40px 40px 40px;
     }
     
@@ -20,6 +20,7 @@ const htmlDoc = function (config) {
       font-size: 80px;
       font-weight: ${config.fontHead.weight};
       font-family: "${config.fontHead.family}";
+      color: `+ getFg(config) + ';' + `
     }
     
     .sub-div {
@@ -31,6 +32,7 @@ const htmlDoc = function (config) {
       font-size: 32px;
       font-weight: ${config.fontSub.weight};
       font-family: "${config.fontSub.family}";
+      color: `+ getFg(config) + ';' + `
     }
     
     button {
@@ -40,7 +42,7 @@ const htmlDoc = function (config) {
       border: none;
       background: none;
       outline: none;
-      color: black;
+      color: `+ getFg(config) + ';' + `
       border: 2px solid;
       border-radius:45px;
       font-family: "${config.fontSub.family}";
@@ -69,7 +71,7 @@ function getFontCSS(font) {
   if (font.family === -1) {
     return ''
   } else {
-  return `@font-face {
+    return `@font-face {
     font-family: '${font.family}';
     font-style: normal;
     font-weight: ${font.weight};
@@ -91,17 +93,17 @@ const codeDoc = function (config) {
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/languages/dart.min.js"
     integrity="sha512-e9tfYUYcegl48CppMz12MOgLQ+d4IsiQyJstDdhsSlQ0ey3P/X3aq7+hzw/dCf++O3ZPB6RZy5Yjv3NoQdBAtg=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/styles/`+ config.theme +`.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/styles/`+ config.theme + `.min.css" />
   <script>hljs.highlightAll();</script>
   <title>Document</title>
   <style>
-    `+ getFontCSS(config.font)+`
+    `+ getFontCSS(config.font) + `
     body {
       width: fit-content;
     }
     pre>code {
       font-size: 30px;
-      font-family:`+config.font.family+` ,monospace;
+      font-family:`+ config.font.family + ` ,monospace;
     }
     pre code.hljs {
       padding: 52px 52px 52px 37px ;
@@ -133,6 +135,22 @@ void main() {
 </html>
   `
   return doc
+}
+
+function getFg(config) {
+  if (!config.colors) {
+    return '#000000'
+  } else {
+    return config.colors.fg
+  }
+}
+
+function getBg(config) {
+  if (!config.colors) {
+    return 'transparent'
+  } else {
+    return config.colors.bg
+  }
 }
 
 module.exports.htmlDoc = htmlDoc

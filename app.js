@@ -18,12 +18,35 @@ app.get('', (req, res) => {
 
 app.get('/para', async (req, res) => {
   console.log('Starting...')
+  var isTransp = false
   if (!req.query.f1) {
     req.query.f1 = 'Arial'
   }
   if (!req.query.f2) {
     req.query.f2 = 'Arial'
   }
+  if (!req.query.bg && !req.query.fg) {
+    isTransp = true
+  } else {
+    isTransp = false
+  }
+  if (( !req.query.bg && req.query.fg ) || ( req.query.bg && !req.query.fg )) {
+    // console.log('null trig');
+    if (!req.query.bg) {
+      req.query.bg = 'ffffff'
+    } else {
+      req.query.fg = '000000'
+    }
+  }
+  if (!isTransp) {
+    req.query.bg = '#' + req.query.bg
+    req.query.fg = '#' + req.query.fg
+    if (!isValidColor(req.query.bg) || !isValidColor(req.query.fg)) {
+      res.send({ error: 'Invalid color' })
+      return
+    }
+  }
+
   if (!(checkFont(req.query.f1) && checkFont(req.query.f2))) {
     res.send({ error: 'Invalid fontface' })
     return
@@ -46,20 +69,39 @@ app.get('/para', async (req, res) => {
     } else {
       font2Url = font2b64.encodeToDataUrlSync('./fonts/' + font2.family + '/' + font2.family + '-' + weight2 + '.ttf')
     }
-
-    const config = {
-      fontHead: {
-        family: font1.family,
-        fontUrl: font1Url,
-        weight: weight1
-      },
-      fontSub: {
-        family: font2.family,
-        fontUrl: font2Url,
-        weight: weight2
+    var config = {}
+    if (isTransp) {
+       config = {
+        fontHead: {
+          family: font1.family,
+          fontUrl: font1Url,
+          weight: weight1
+        },
+        fontSub: {
+          family: font2.family,
+          fontUrl: font2Url,
+          weight: weight2
+        }
+      }
+    } else {
+       config = {
+        fontHead: {
+          family: font1.family,
+          fontUrl: font1Url,
+          weight: weight1,
+        },
+        fontSub: {
+          family: font2.family,
+          fontUrl: font2Url,
+          weight: weight2
+        },
+        colors: {
+          fg: req.query.fg,
+          bg: req.query.bg
+        }
       }
     }
-    const image = await nodeHtmlToImage({ html: myHtml.htmlDoc(config), transparent: true })
+    const image = await nodeHtmlToImage({ html: myHtml.htmlDoc(config), transparent: isTransp })
     res.writeHead(200, { 'Content-Type': 'image/png' });
     res.end(image, 'binary');
   }
@@ -216,3 +258,7 @@ function checkTheme(theme) {
   return false
 }
 
+function isValidColor(str) {
+  // console.log(str + ': ' + (str.match(/^#[a-f0-9]{6}$/i) !== null));
+  return str.match(/^#[a-f0-9]{6}$/i) !== null;
+}
