@@ -1,4 +1,4 @@
-/fonts
+# /fonts
 /node_modules
-fontDB.js
+# fontDB.js
 test.html

@@ -101,8 +101,9 @@ app.get('/para', async (req, res) => {
         }
       }
     }
-    const image = await nodeHtmlToImage({ html: myHtml.htmlDoc(config), transparent: isTransp })
-    res.writeHead(200, { 'Content-Type': 'image/png' });
+    const image = await nodeHtmlToImage({ html: myHtml.htmlDoc(config), transparent: isTransp , puppeteerArgs: {args: ['--no-sandbox',
+    '--disable-setuid-sandbox']}})
+    res.writeHead(200, { 'Content-Type': 'image/png' })
     res.end(image, 'binary');
   }
 
@@ -140,7 +141,8 @@ app.get('/code', async (req, res) => {
     theme: req.query.theme
   }
 
-  const image = await nodeHtmlToImage({ html: myHtml.codeDoc(config), transparent: true })
+  const image = await nodeHtmlToImage({ html: myHtml.codeDoc(config), transparent: true , puppeteerArgs: {args: ['--no-sandbox',
+  '--disable-setuid-sandbox']}})
   res.writeHead(200, { 'Content-Type': 'image/png' });
   res.end(image, 'binary');
 })
