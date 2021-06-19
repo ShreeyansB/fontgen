@@ -13,7 +13,7 @@ const publicDirPath = path.join(__dirname, '/html')
 app.use(express.static(publicDirPath))
 
 app.get('', (req, res) => {
-  res.send({ error: 'emrror' })
+  res.send(myHtml.infoDoc)
 })
 
 app.get('/para', async (req, res) => {

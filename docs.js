@@ -153,5 +153,13 @@ function getBg(config) {
   }
 }
 
+const infoDoc = {
+  name: 'fontgen',
+  author: 'ShreeyansB',
+  repo: 'https://github.com/ShreeyansB/fontgen',
+  usage: 'Visit /para and /code subdirectories for generating images. Check https://github.com/ShreeyansB/fontgen#readme for more details.'
+}
+
 module.exports.htmlDoc = htmlDoc
 module.exports.codeDoc = codeDoc
+module.exports.infoDoc = infoDoc
