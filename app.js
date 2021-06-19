@@ -165,9 +165,10 @@ function checkFont(font) {
   if (font === -1) {
     return true
   }
-  var i = fontDB.db.every(f => {
+  var i = false
+  fontDB.db.forEach(f => {
     if (f.family === font) {
-      return true
+      i = true
     }
   })
   if (i) {
@@ -192,7 +193,7 @@ function getFont(font) {
     }
   }
   var i
-  fontDB.db.every(f => {
+  fontDB.db.forEach(f => {
     if (f.family === font) {
       i = f
     }
@@ -254,7 +255,6 @@ function checkTheme(theme) {
   if (i !== -1) {
     return true
   }
-  console.log(false);
   return false
 }
 
