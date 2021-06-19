@@ -60,7 +60,7 @@ Generate a paragraph
 
 __If bg and fg are not provided then bg is transparent and fg is black__
 
-![paragraph](ss1.png)
+<img src="https://github.com/ShreeyansB/fontgen/blob/main/ss1.png" width="600">
 
 ---
 
@@ -74,4 +74,4 @@ Generate a code block
 | font      | Font Family of the code   |
 | theme     | Syntax highlighting theme |
 
-![code](ss2.png)
+<img src="https://github.com/ShreeyansB/fontgen/blob/main/ss2.png" width="600">
