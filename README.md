@@ -30,24 +30,28 @@ const db = [
 > The db array is mainly to make the API less complex for me. I plan to use MongoDB to store the font details
 
 ## Usage
+### List all fonts
+Get a list of all the fonts supported. Used for the _f1_, _f2_, _w1_ & _w2_ query parameter.
 ```shell
 curl GET "https://fontgen-sb.herokuapp.com/list-fonts"
 ```
-Get a list of all the fonts supported. Used for the _f1_, _f2_, _w1_ & _w2_ query parameter.
 
 ---
+
+### List all themes
+Get a list of all the syntax highlighting themes supported by highlight.js. Used for the _theme_ query parameter.
 
 ```shell
 curl GET "https://fontgen-sb.herokuapp.com/list-themes"
 ```
-Get a list of all the syntax highlighting themes supported by highlight.js. Used for the _theme_ query parameter.
 
 ---
 
+### Generate paragraph
+Generate a paragraph
 ```shell
 curl GET "https://fontgen-sb.herokuapp.com/para?f1=Lora&w1=700&f2=Inter&w2=400"
 ```
-Generate a paragraph
 
 | Parameter | Description                                         |
 |-----------|-----------------------------------------------------|
@@ -64,10 +68,11 @@ __If bg and fg are not provided then bg is transparent and fg is black__
 
 ---
 
+### Generate code
+Generate a code block
 ```shell
 curl GET "https://fontgen-sb.herokuapp.com/code?font=IBMPlexMono&theme=base16/material"
 ```
-Generate a code block
 
 | Parameter | Description               |
 |-----------|---------------------------|
