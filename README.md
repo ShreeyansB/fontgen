@@ -50,7 +50,7 @@ curl GET "https://fontgen-sb.herokuapp.com/list-themes"
 ### Generate paragraph
 Generate a paragraph
 ```shell
-curl GET "https://fontgen-sb.herokuapp.com/para?f1=Lora&w1=700&f2=Inter&w2=400"
+curl GET "https://fontgen-sb.herokuapp.com/para?f1=Lora&w1=700&f2=Inter&w2=400&bg=ff5e79&fg=3c3980"
 ```
 
 | Parameter | Description                                         |
